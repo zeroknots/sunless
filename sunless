@@ -1,0 +1,80 @@
+#!/bin/zsh
+
+# Print usage information
+usage() {
+  echo "Usage: $0 {create|add|remove|update} [repo_name|repo_url]"
+  exit 1
+}
+
+# Check if the required number of arguments is provided
+if [ $# -lt 1 ]; then
+  usage
+fi
+
+# Function to create a new GitHub repository, add it as a git submodule
+create() {
+  # Check if a repository name is provided
+  if [ -z "$1" ]; then
+    echo "Please provide a repository name."
+    exit 1
+  fi
+
+  # Create a new GitHub repository using the GitHub CLI
+  gh repo create "$1" --private
+
+  # Add the new repository as a git submodule
+  git submodule add "git@github.com:$(gh api user --jq '.login')/$1.git" "$1"
+}
+
+# Function to add an existing GitHub repository as a git submodule
+add() {
+  # Check if a repository URL is provided
+  if [ -z "$1" ]; then
+    echo "Please provide a GitHub repository URL."
+    exit 1
+  fi
+
+  # Extract the repository name from the URL
+  repo_name=$(basename "$1" .git)
+
+  # Add the GitHub repository as a git submodule
+  git submodule add "$1" "$repo_name"
+}
+
+# Function to remove a GitHub repository and its submodule
+remove() {
+  # Check if a repository name is provided
+  if [ -z "$1" ]; then
+    echo "Please provide a repository name."
+    exit 1
+  fi
+
+  # Remove the git submodule
+  git submodule deinit -f "$1"
+  git rm -f "$1"
+}
+
+# Function to update all git submodules
+update() {
+  git submodule update --remote --recursive
+}
+
+# Main function to handle user input
+case "$1" in
+  create)
+    create "$2"
+    ;;
+  add)
+    add "$2"
+    ;;
+  remove)
+    remove "$2"
+    ;;
+  update)
+    update
+    ;;
+  *)
+    usage
+    ;;
+esac
+
