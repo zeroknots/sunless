@@ -4,6 +4,9 @@
 
 Sunless is a Git submodules manager that simplifies the process of creating, adding, removing, and updating Git submodules. It's a shell script that acts as a wrapper around Git and the GitHub CLI, streamlining your submodule management tasks.
 
+## Motivation
+
+Sunless was created to simplify the management of Obsidian markdown vaults, specifically for Solidity audits and development projects. It enables users to organize their notes related to individual projects in separate Git submodules, making it easy to access all notes within one vault, while still having the flexibility to share selected projects with coworkers or open-source them. Furthermore, when working on smart contract reviews, Sunless allows users to add the target scope repository as a submodule, seamlessly integrating it within Obsidian's second brain, without losing context or compromising organization. Sunless aims to streamline your Obsidian workflow, making collaboration and organization more efficient and effective.
 ## Installation
 
 1. Clone the Sunless repository:
